@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/src/img/logo_admin.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./img/logo_admin.ico" type="image/x-icon">
     <link rel="stylesheet" href="./output.css">
     <link rel="stylesheet" href="./other.css">
 
@@ -89,6 +89,15 @@
 
   <!--LIGHTBOX PARA GALLERY-->
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox-plus-jquery.min.js"></script>
+<!-- component -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+    });
+});
+</script>
 
   <!--pagination-->
   <script src="https://cdn.jsdelivr.net/npm/paginationjs@2.1.5/dist/pagination.min.js"></script>
@@ -102,52 +111,45 @@ import {
 
 initTE({ Collapse });
 </script>
+
+<!--Incluyendo jquery-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- paginacion galeria -->
+
 <script>
-        const imagesPerPage = 6; // Cantidad de imágenes por página
-        let currentPage = 1;
+$(document).ready(function() {
+    let allVisible = false;
+    const maxGroups = 3;  // Cambia esto al número total de grupos que tengas
 
-        const images = document.querySelectorAll('.gallery-image');
-        const prevPageButton = document.querySelector('.prev-page');
-        const nextPageButton = document.querySelector('.next-page');
-
-        function showPage(page) {
-            images.forEach((image, index) => {
-                if (index < (page - 1) * imagesPerPage || index >= page * imagesPerPage) {
-                    image.style.display = 'none';
-                } else {
-                    image.style.display = 'block';
-                }
-            });
+    // Función para mostrar u ocultar todas las imágenes
+    function toggleAllImages() {
+        for (let i = 1; i <= maxGroups; i++) {
+            $(`.image-group-${i}`).toggle();
         }
+    }
 
-        function updateButtons() {
-            prevPageButton.disabled = currentPage === 1;
-            nextPageButton.disabled = currentPage >= Math.ceil(images.length / imagesPerPage);
+    // Botón "Cargar Todas" y su evento click
+    $('#load-more').on('click', function() {
+        if (!allVisible) {
+            toggleAllImages();
+            $('#load-more').text('Ocultar');
+        } else {
+            toggleAllImages();
+            $('#load-more').text('Cargar Todas');
         }
+        allVisible = !allVisible;
+    });
 
-        prevPageButton.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-                updateButtons();
-            }
-        });
+    // Oculta todas las imágenes excepto el primer grupo al cargar la página
+    for (let i = 2; i <= maxGroups; i++) {
+        $(`.image-group-${i}`).hide();
+    }
+});
+</script>
 
-        nextPageButton.addEventListener('click', () => {
-            if (currentPage < Math.ceil(images.length / imagesPerPage)) {
-                currentPage++;
-                showPage(currentPage);
-                updateButtons();
-            }
-        });
-
-        showPage(currentPage);
-        updateButtons();
-    </script>
-
-
-    <script>
+<!--paginacion de scroll-->
+<script>
         document.addEventListener("DOMContentLoaded", function () {
             const menuLinks = document.querySelectorAll(".menu-link");
 
@@ -169,6 +171,10 @@ initTE({ Collapse });
         });
     </script>
 
+
+<!--flowbite-->
+
+<script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
     
 </body>
 </html>
